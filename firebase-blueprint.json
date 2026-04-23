@@ -1,0 +1,39 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Registered User",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "createdAt": { "type": "number", "description": "server timestamp" }
+      },
+      "required": ["userId", "email", "createdAt"]
+    },
+    "VaultEntry": {
+      "title": "Vault Entry",
+      "description": "A saved credential or secret payload",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "encryptedData": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["userId", "name", "type", "encryptedData", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "#/entities/User",
+      "description": "User profiles"
+    },
+    "/vault/{vaultId}": {
+      "schema": "#/entities/VaultEntry",
+      "description": "Vault items"
+    }
+  }
+}
