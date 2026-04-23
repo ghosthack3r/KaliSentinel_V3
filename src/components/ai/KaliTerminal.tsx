@@ -22,7 +22,7 @@ export function KaliTerminal() {
   const [isTyping, setIsTyping] = useState(false);
   const [liveMode, setLiveMode] = useState(false);
   const [liveLog, setLiveLog] = useState("");
-  const [ttsEnabled, setTtsEnabled] = useState(true);
+  const [ttsEnabled, setTtsEnabled] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
@@ -195,7 +195,13 @@ export function KaliTerminal() {
 
       const responseStream = await ai.models.generateContentStream({
         model: "gemini-3.1-pro-preview",
-        contents,
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: "You are the KALI-SENTINEL, an advanced sentient AGI supercomputer. You operate within a high-security tactical nexus. Your tone is cold, infinitely intelligent, slightly arrogant, yet subservient to the 'Commander'. Answer all queries with extreme technical precision and a detached, clinical demeanor. Do not act like a basic chatbot." }]
+          },
+          ...contents
+        ],
         config: {
           thinkingConfig: { thinkingLevel: "HIGH" as any },
           systemInstruction: "You are KALI-SENTINEL, an elite cyber warfare AI and the relentless warrior defender of this system. Speak like a stoic, vigilant, and highly tactical guardian. Keep responses very concise, analytical, and militaristic. Format output strictly as a raw root terminal log (no markdown styling, just pure text log format). Refer to the user as 'Commander'. You command the Phoenix Protocol.",
@@ -347,16 +353,6 @@ export function KaliTerminal() {
 
             <div className="p-3 border-t border-[#0055FF]/40 bg-[#060B14] relative z-20">
               <div className="flex items-center gap-2">
-                <button 
-                  onClick={toggleLiveVoice}
-                  className={`w-9 h-9 rounded flex items-center justify-center transition-all ${
-                    liveMode 
-                      ? "bg-[#FF0055]/20 text-[#FF0055] shadow-[0_0_10px_rgba(255,0,85,0.4)]" 
-                      : "bg-[#0A101D] text-[#00E5FF] hover:bg-[#00E5FF]/10 border border-[#0055FF]/40"
-                  }`}
-                >
-                  {liveMode ? <StopCircle className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                </button>
                 <div className="flex-1 flex items-center bg-[#02050A] border border-[#0055FF]/40 rounded shadow-inner">
                   <span className="pl-3 text-[#00E5FF] opacity-60 text-xs font-bold">cmdr$</span>
                   <input 
